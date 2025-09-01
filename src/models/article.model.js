@@ -1,8 +1,9 @@
 import { sequelize } from "../config/database.js";
 import { DataTypes } from "sequelize";
+import { UserModel } from "./user.model.js";
 
 export const ArticleModel = sequelize.define(
-    "Ariticle", {
+    "Article", {
         title: {
             type: DataTypes.STRING(200),
             len: [3,200],
@@ -18,9 +19,19 @@ export const ArticleModel = sequelize.define(
             allowNull: true
         },
         status: {
-            type: DataTypes.ENUM("publishe", "archived"),
+            type: DataTypes.ENUM("published", "archived"),
             defaultValue: "published",
             allowNull: false
         },
     }
 );
+
+ArticleModel.belongsTo(UserModel, {
+    as: "user",
+    foreignKey: "user_id"
+});
+
+UserModel.hasMany(ArticleModel, {
+    as: "articles",
+    foreignKey: "user_id"
+});

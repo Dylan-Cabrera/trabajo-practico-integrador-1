@@ -3,6 +3,11 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import { startDB } from "./src/config/database.js";
+import "./src/models/article.model.js"
+import "./src/models/article_tag.model.js"
+import "./src/models/tag.model.js"
+import "./src/models/profile.model.js"
+import "./src/models/user.model.js"
 
 
 startDB();

@@ -1,9 +1,9 @@
 
 import { DataTypes } from "sequelize";
-import { sequelize } from "../config/database";
+import { sequelize } from "../config/database.js";
 
 export const TagModel = sequelize.define(
-    "Tagodel", {
+    "Tag", {
         name: {
             type: DataTypes.STRING(30),
             lem: [2,30],
