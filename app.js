@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import { startDB } from "./src/config/database.js";
+import authRouter from "./src/routes/auth.routes.js";
 import "./src/models/article.model.js"
 import "./src/models/article_tag.model.js"
 import "./src/models/tag.model.js"
@@ -20,6 +21,7 @@ app.use(cookieParser());
 app.use(cors({
     origin: "http://localhost:3000"
 }));
+app.use("/api", authRouter);
 
 
 app.listen(PORT, () => {
