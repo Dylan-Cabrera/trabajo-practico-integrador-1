@@ -1,9 +1,9 @@
 import { UserModel } from "../models/user.model.js";
 import { ProfileModel } from "../models/profile.model.js";
-import jwt from "jsonwebtoken";
-import bcryp from "bcrypt"
+import cookieParser from "cookie-parser";
 import { sequelize } from "../config/database.js";
-import { bcrypHash } from "../helpers/bcryp.helper.js";
+import { bcrypCompare, bcrypHash } from "../helpers/bcryp.helper.js";
+import { generateToken } from "../helpers/jwt.helper.js";
 
 export const register = async(req,res) => {
     const {username, email, password, role, first_name, last_name} = req.body;
@@ -49,7 +49,35 @@ export const register = async(req,res) => {
 export const login = async(req,res) => {
     const {username, password} = req.body;
     try {
-        
+        const user = await UserModel.findOne({
+            where: {username: username}
+        });
+        if(!user) {
+            return res.status(401).json({
+                msg: "Credenciales inválidas"
+            })
+        };
+
+
+        const validPassword = await bcrypCompare(password, user.dataValues.password);
+        if(!validPassword){
+            return res.status(401).json({
+                msg: "Credenciales inválidas"
+            })
+        };
+        console.log("valido contraseña")
+
+        const token = generateToken(user);
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: 1000* 60* 60
+        })
+
+        return res.status(200).json({
+            msg: "Logueado correctamente"
+        })
+
     } catch (error) {
         
     }
@@ -57,7 +85,10 @@ export const login = async(req,res) => {
 
 export const logout = async(req,res) => {
     try {
-        
+        res.clearCookie("token");
+        res.status(200).json({
+            msg: "Logout exitoso"
+        })
     } catch (error) {
         
     }
