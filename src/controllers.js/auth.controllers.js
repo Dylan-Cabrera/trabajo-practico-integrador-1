@@ -1,9 +1,9 @@
 import { UserModel } from "../models/user.model.js";
 import { ProfileModel } from "../models/profile.model.js";
-import cookieParser from "cookie-parser";
 import { sequelize } from "../config/database.js";
 import { bcrypCompare, bcrypHash } from "../helpers/bcryp.helper.js";
 import { generateToken } from "../helpers/jwt.helper.js";
+import { matchedData } from "express-validator";
 
 export const register = async(req,res) => {
     const {username, email, password, role, first_name, last_name} = req.body;
@@ -50,14 +50,19 @@ export const login = async(req,res) => {
     const {username, password} = req.body;
     try {
         const user = await UserModel.findOne({
-            where: {username: username}
+            where: {username: username},
+            include: {
+                model: ProfileModel,
+                as: "profile",
+                attributes: ["first_name", "last_name"]
+            }
         });
         if(!user) {
             return res.status(401).json({
                 msg: "Credenciales inválidas"
             })
         };
-
+        console.log(user)
 
         const validPassword = await bcrypCompare(password, user.dataValues.password);
         if(!validPassword){
@@ -65,7 +70,6 @@ export const login = async(req,res) => {
                 msg: "Credenciales inválidas"
             })
         };
-        console.log("valido contraseña")
 
         const token = generateToken(user);
 
@@ -79,7 +83,7 @@ export const login = async(req,res) => {
         })
 
     } catch (error) {
-        
+         res.status(500).json({error})
     }
 };
 
@@ -90,6 +94,41 @@ export const logout = async(req,res) => {
             msg: "Logout exitoso"
         })
     } catch (error) {
-        
+         res.status(500).json({error})
+    }
+};
+
+export const profile = async (req,res) => {
+    
+    try {
+        const user = req.userLogged;
+        console.log(user)
+        res.status(200).json({
+            first_name: user.first_name,
+            last_name: user.last_name
+        })
+    } catch (error) {
+        res.status(500).json({
+            msg: "Error interno de servidor"
+        })
+        console.log(error)
+    }
+};
+
+export const updateProfile = async (req,res) => {
+    try {
+        //const data = matchedData(req, {locations: ["body"]});
+        const profile= await ProfileModel.update(req.body, {
+        where: {
+            id: req.params.id
+        }
+    });
+    res.status(200).json(profile);
+    
+
+    } catch (error) {
+         res.status(500).json({
+            msg: "Error interno del servidor" + error
+         })
     }
 };

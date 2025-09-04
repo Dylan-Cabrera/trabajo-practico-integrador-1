@@ -5,8 +5,11 @@ dotenv.config();
 
 export const generateToken = (user)=> {
     const token = jwt.sign({
-        id: user.dataValues.id,
-        role: user.dataValues.role
+        id: user.id,
+        role: user.role,
+        first_name: user.profile.first_name,
+        last_name: user.profile.last_name,
+
     },
     process.env.JWT_SECRET,
     {
@@ -17,11 +20,15 @@ export const generateToken = (user)=> {
     return token;
 };
 
-export const verifyToken = (req,res,next) => {
+export const verifyToken = (token) => {
     try {
-        return jwt.verify(token, process.env.JWT_SECRET)
+
+        //devuelve el payload del token
+        const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET) 
+
+        return tokenDecoded;
 
     } catch (error) {
-        throw new Error("Error al verifycar el token", error.message)
+        throw new Error("Error al verificar el token: " + error.message);
     }
 };
