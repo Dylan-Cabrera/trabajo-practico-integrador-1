@@ -117,15 +117,19 @@ export const profile = async (req,res) => {
 
 export const updateProfile = async (req,res) => {
     try {
-        //const data = matchedData(req, {locations: ["body"]});
-        const profile= await ProfileModel.update(req.body, {
+        const data = matchedData(req, {locations: ["body"]});
+        const updateProfile= await ProfileModel.update(data, {
         where: {
             id: req.params.id
         }
     });
-    res.status(200).json(profile);
     
+    if(updateProfile) {
+        const profile = await ProfileModel.findByPk(req.params.id);
+        res.status(200).json(profile);
+    };
 
+    
     } catch (error) {
          res.status(500).json({
             msg: "Error interno del servidor" + error
