@@ -1,6 +1,22 @@
 import { where } from "sequelize";
 import { ArticleModel } from "../models/article.model.js";
 
+export const createArticle = async ( req, res) => {
+    const {title, content, excerpt, status} = req.body;
+    try {
+        const create = await ArticleModel.create({
+            title: title,
+            content: content,
+            excerpt: excerpt,
+            status: status,
+            user_id: req.userLogged.id
+        })
+        res.status(201).json(create);
+    } catch (error) {
+        res.status(500).json("Error interno del servidor" + error)
+    }
+};
+
 export const updateArticle = async (req,res) => {
     const {title, content, excerpt, status} = req.body;
     try {
@@ -10,7 +26,7 @@ export const updateArticle = async (req,res) => {
         }});
 
         if(update){
-            const article = await ArticleModel.findByPk(req,params.id);
+            const article = await ArticleModel.findByPk(req.params.id);
             res.status(200).json(article);
         }
 
@@ -68,7 +84,7 @@ export const getArticleBYIdPrivate = async (req,res) => {
 
 
 
-const deleteArticle = async (req,res) => {
+export const deleteArticle = async (req,res) => {
     try {
         const article = await ArticleModel.findByPk(req.params.id);
         await article.destroy();

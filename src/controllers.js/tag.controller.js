@@ -10,7 +10,7 @@ export const createTag = async (req,res) => {
     }  
 };
 
-const getTags = async (req,res) => {
+export const getTags = async (req,res) => {
     try {
         const tags = await TagModel.findAll();
         res.status(200).json(tags);
@@ -19,7 +19,7 @@ const getTags = async (req,res) => {
     }
 };
 
-const getTagBYId = async (req,res) => {
+export const getTagBYId = async (req,res) => {
     try {
         const tag = await TagModel.findByPk(req.params.id);
         res.status(200).json(tag);
@@ -28,7 +28,7 @@ const getTagBYId = async (req,res) => {
     }
 };
 
-const updateTag = async (req,res) => {
+export const updateTag = async (req,res) => {
     const {name} = req.body;
     try {
     
@@ -37,7 +37,7 @@ const updateTag = async (req,res) => {
         }});
 
         if(update){
-            const tag = await TagModel.findByPk(req,params.id);
+            const tag = await TagModel.findByPk(req.params.id);
             res.status(200).json(tag);
         }
 
@@ -48,7 +48,7 @@ const updateTag = async (req,res) => {
 
 
 
-const deleteTag = async (req,res) => {
+export const deleteTag = async (req,res) => {
     try {
         const tag = await TagModel.findByPk(req.params.id);
         await tag.destroy();

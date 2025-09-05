@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { startDB } from "./src/config/database.js";
 import authRouter from "./src/routes/auth.routes.js";
 import userRouter from "./src/routes/user.routes.js";
+import tagRouter from "./src/routes/tag.routes.js";
 import "./src/models/article.model.js"
 import "./src/models/article_tag.model.js"
 import "./src/models/tag.model.js"
@@ -25,6 +26,7 @@ app.use(cors({
 }));
 app.use("/api", authRouter);
 app.use("/api", userRouter);
+app.use("/api", tagRouter);
 
 
 app.listen(PORT, () => {

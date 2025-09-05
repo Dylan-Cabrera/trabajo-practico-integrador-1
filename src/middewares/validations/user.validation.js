@@ -59,6 +59,16 @@ export const updateUserValidations = [
         )
         .optional()
         ,
+        body("role")
+    .custom(
+        async(value) => {
+            const roles = ["user", "admin"]
+            if(!roles.includes(value)) {
+                throw new Error("Role invalido")
+            }
+        }
+    )
+        ,
         body("password").notEmpty().withMessage("El campo contraseña no puede estar vacío")
         .optional()
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/).withMessage("La contraseña debe tener al menos una mayúscula, una mínuscula, un número y 8 carácteres")
