@@ -36,3 +36,15 @@ UserModel.hasMany(ArticleModel, {
     as: "articles",
     foreignKey: "user_id"
 });
+
+UserModel.addHook("afterDestroy", async (user) => {
+    try {
+        const article = await ArticleModel.findOne({ where: {
+            user_id: user.id
+        }})
+
+        await article.destroy()
+    } catch (error) {
+        console.log(error)
+    }
+})

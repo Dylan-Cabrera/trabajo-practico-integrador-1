@@ -93,7 +93,7 @@ export const updateProfileValidations = [
         async (value) => {
             const profile = await ProfileModel.findByPk(value);
             if(!profile) {
-                throw new Error("Profile con encontrado")
+                throw new Error("Profile no encontrado")
             }
     }
     )

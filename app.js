@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { startDB } from "./src/config/database.js";
 import authRouter from "./src/routes/auth.routes.js";
+import userRouter from "./src/routes/user.routes.js";
 import "./src/models/article.model.js"
 import "./src/models/article_tag.model.js"
 import "./src/models/tag.model.js"
@@ -23,6 +24,7 @@ app.use(cors({
     credentials: true
 }));
 app.use("/api", authRouter);
+app.use("/api", userRouter);
 
 
 app.listen(PORT, () => {
