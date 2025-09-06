@@ -12,7 +12,7 @@ router.get("/articles/user", authMiddleware, getArticlesPrivate);
 router.get("/articles/user/:id", authMiddleware, getArticleByIdValidations, validator, getArticleBYIdPrivate);
 router.post("/articles", authMiddleware, createArticleValidations, validator, createArticle);
 router.put("/articles/:id", authMiddleware, ownerArticle, updateArticleValidations, validator, updateArticle);
-router.put("/articles/:id", authMiddleware, ownerArticle, deleteArticleValidations, validator, deleteArticle);
+router.delete("/articles/:id", authMiddleware, ownerArticle, deleteArticleValidations, validator, deleteArticle);
 
 
 export default router;

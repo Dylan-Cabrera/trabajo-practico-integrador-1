@@ -63,7 +63,7 @@ export const updateUserValidations = [
     .custom(
         async(value) => {
             const roles = ["user", "admin"]
-            if(!roles.includes(value)) {
+            if(!roles.includes(value)) { 
                 throw new Error("Role invalido")
             }
         }

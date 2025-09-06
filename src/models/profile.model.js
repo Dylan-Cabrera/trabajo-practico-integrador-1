@@ -24,6 +24,9 @@ export const ProfileModel = sequelize.define(
             type: DataTypes.DATE,
             allowNull: true
         }
+    },
+    {
+        paranoid: true
     }
 );
 

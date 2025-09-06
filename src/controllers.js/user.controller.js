@@ -72,12 +72,12 @@ export const updateUser = async (req,res) => {
 
 export const deleteUser = async (req,res) => {
     try {
-        const user = await UserModel.findByPk(req.params.id);
+        const user = await UserModel.findByPk(req.params.id);4
         await user.destroy();
         res.status(200).json({
             msg: "Usuario eliminado con exito"
         })
     } catch (error) {
-        res.status(500).json("Error interno del servidor" + error);
+        res.status(500).json("Error interno del servidor, error:" + error);
     }
 };

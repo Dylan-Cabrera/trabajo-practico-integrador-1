@@ -8,18 +8,25 @@ export const ownerArticle = async (req, res, next) => {
         const user = req.userLogged;
 
         const article = await ArticleModel.findByPk(req.params.id);
+        if(!article) {
+            res.status(404).json("Article no encontrado")
+        }
     
-        if(user.role === "admin" || article.user_id === user.id) {
-            next();
-        };
+        console.log(article)
+        if(!(user.role === "admin")) {
+            if(!(article.dataValues.user_id === user.id)) {
+                return res.status(403).json({
+                    msg: "Usuario no autorizado"
+                });
 
-        return res.status(403).json({
-            msg: "Usuario no autorizado"
-        });
+            }
+        };
+        
+        next();
 
     } catch (error) {
         res.status(500).json({
-            msg: "Erro al verificar owner" + error
+            msg: "Error al verificar owner" + error
         })}};
 
 export const ownerProfile = async (req, res, next) => {

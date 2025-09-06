@@ -13,9 +13,8 @@ export const adminVerify = (req, res, next) => {
             })
         };
 
-        const userRole = user.role;
-
-        if(userRole != "admin") {
+        console.log(user.role)
+        if(user.role != "admin") {
             res.status(403).json({
                 msg: "Acceso no autorizado"
             })

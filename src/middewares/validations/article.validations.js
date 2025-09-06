@@ -17,10 +17,10 @@ export const createArticleValidations = [
     body("title").notEmpty().withMessage("El title no puede estar vacío")
     .isLength({min: 3, max: 200}).withMessage("El title debe tener entre 3 y 200 carácteres")
     ,
-    body("content").withMessage("El constent no puede estar vacío")
+    body("content").notEmpty().withMessage("El contentt no puede estar vacío")
     .isLength({min: 50}).withMessage("El content debe tener mínimo 50 carácteres")
     ,
-    body("excerpt").withMessage("El excerpt no puede estar vacío")
+    body("excerpt").notEmpty().withMessage("El excerpt no puede estar vacío")
     .isLength({max: 500}).withMessage("El excerpt debe tener mínimo 50 carácteres")
     ,
     body("status")
@@ -32,14 +32,7 @@ export const createArticleValidations = [
             }
         }
     )
-    ,
-    body("user_id").isInt().withMessage("El id debe ser un número entero")
-        .custom(async (value)=> {
-                const user = UserModel.findByPk(value);
-                if(!user) {
-                    throw new Error('No existe un usuario con ese id')
-                }
-            })
+
 ];
 
 export const updateArticleValidations = [
@@ -56,11 +49,11 @@ export const updateArticleValidations = [
     .isLength({min: 3, max: 200}).withMessage("El title debe tener entre 3 y 200 carácteres")
     .optional()
     ,
-    body("content").withMessage("El constent no puede estar vacío")
+    body("content").notEmpty().withMessage("El constent no puede estar vacío")
     .isLength({min: 50}).withMessage("El content debe tener mínimo 50 carácteres")
     .optional()
     ,
-    body("excerpt").withMessage("El excerpt no puede estar vacío")
+    body("excerpt").notEmpty().withMessage("El excerpt no puede estar vacío")
     .isLength({max: 500}).withMessage("El excerpt debe tener mínimo 50 carácteres")
     .optional()
     ,
